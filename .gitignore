@@ -13,6 +13,7 @@
 !/.config/awesome
 !/.config/nvim
 !/.config/ranger
+!/.config/rofi
 
 !/.bashrc
 !/.zshrc

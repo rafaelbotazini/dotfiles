@@ -23,8 +23,8 @@ nnoremap <leader>h :split<space>
 nnoremap <leader>v :vsplit<space>
 
 " Shortcut tab navigation
-map <C-j> :tabp<CR> 
-map <C-k> :tabn<CR> 
+map <a-j> :tabp<CR> 
+map <a-k> :tabn<CR> 
 
 " Open tab shotcut:
 nnoremap <leader>t :tabnew<space>
@@ -100,4 +100,12 @@ autocmd BufWinEnter * silent NERDTreeMirror
 
 " Trigger CoC with ctrl-space
 inoremap <silent><expr> <c-space> coc#refresh()
+
+
+
+"
+"       VimWiki
+"
+
+let g:vimwiki_list = [{ 'path': '~/docs/vimwiki/' }]
 
