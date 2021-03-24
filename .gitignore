@@ -1,0 +1,27 @@
+# ignore everything at top level
+/*
+
+# keep .config folder
+!/.config
+
+# ignore everything inside .config
+/.config/*
+
+# keep custom configs
+
+!/.config/alacritty
+!/.config/awesome
+!/.config/nvim
+!/.config/ranger
+
+!/.bashrc
+!/.zshrc
+!/.xinitrc
+!/.Xresources
+
+
+# keep repository files
+
+!/README.md
+!/.gitignore
+

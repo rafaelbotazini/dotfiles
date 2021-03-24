@@ -1,0 +1,103 @@
+let mapleader="\\"
+
+" Insert spaces on indent
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+
+" Line numbers on the left
+set number
+
+" Intuitive split navigation
+set splitbelow splitright
+
+" kinda gringe bro ngl
+set mouse=a
+
+" Shortcut split navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Open split shortcuts
+nnoremap <leader>h :split<space>
+nnoremap <leader>v :vsplit<space>
+
+" Shortcut tab navigation
+map <C-j> :tabp<CR> 
+map <C-k> :tabn<CR> 
+
+" Open tab shotcut:
+nnoremap <leader>t :tabnew<space>
+
+" Display matching files when tab complete
+set path+=**
+set wildmode=longest,list,full
+
+" Install plugins with vim-plug
+call plug#begin(stdpath('data') . '/plugged')
+
+    " Appearance
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'morhetz/gruvbox'
+    Plug 'itchyny/lightline.vim'
+    Plug 'shinchu/lightline-gruvbox.vim'
+
+    " Nerdtree
+    Plug 'preservim/nerdtree'
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+
+    " Autocompletion
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+    " Syntax highlighting
+    Plug 'yuezk/vim-js', { 'for': 'js' }
+    Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'jsx' }
+
+    " Miscellanious
+    Plug 'vimwiki/vimwiki'
+
+call plug#end()
+
+
+"
+"       Gruvbox
+"
+
+autocmd VimEnter * ++nested colorscheme gruvbox
+autocmd VimEnter * hi Normal ctermbg=none
+
+
+
+"
+"       Lightline
+"
+
+" Set gruvbox theme to lightline
+let g:lightline = { 'colorscheme': 'gruvbox' }
+
+
+
+"
+"       NERDTree 
+"
+
+let g:NERDTreeGitStatusUseNerdFonts = 1
+
+nnoremap <C-b> :NERDTreeToggle<CR>
+
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+     \ quit | endif
+
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * silent NERDTreeMirror
+
+
+
+"
+"       CoC
+"
+
+" Trigger CoC with ctrl-space
+inoremap <silent><expr> <c-space> coc#refresh()
+
