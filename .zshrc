@@ -20,6 +20,7 @@ plugins=(
 # Source oh-my-zsh functions
 source $ZSH/oh-my-zsh.sh
 
+# [rafael@arch ~ (master )]$ 
 PROMPT='[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[green]%}%m%{$reset_color%} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}]$ '
 
 ZSH_THEME_GIT_PROMPT_PREFIX="(%{$fg_bold[green]%}"

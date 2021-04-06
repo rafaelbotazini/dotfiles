@@ -48,6 +48,8 @@ call plug#begin(stdpath('data') . '/plugged')
 
     " Autocompletion
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'tpope/vim-surround'
+    Plug 'Townk/vim-autoclose'
 
     " Syntax highlighting
     Plug 'yuezk/vim-js', { 'for': 'js' }
