@@ -224,13 +224,15 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
 
+    -- lock screen
+    awful.key({ modkey },            "Escape",     function () awful.spawn.with_shell('dm-tool lock') end,
+              {description = "lock screen", group = "awesome"}),
+
     -- focus tags
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
               {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
               {description = "view next", group = "tag"}),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
 
     -- focus screen
     awful.key({ modkey }, "Tab", function () awful.screen.focus_relative( 1) end,
@@ -273,11 +275,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift" }, "p", function() awful.spawn("passmenu") end,
               {description = "copy password to clipboard with passmenu", group = "launcher"}),
 
-    -- spawn passmenu
+    -- file manager
     awful.key({ modkey          }, "e", function() awful.spawn("thunar") end,
               {description = "open file manager", group = "launcher"}),
 
-    -- spawn passmenu
     awful.key({ modkey, "Shift" }, "e", function() awful.spawn(terminal .. " -e ranger") end,
               {description = "open terminal file manager", group = "launcher"}),
 
