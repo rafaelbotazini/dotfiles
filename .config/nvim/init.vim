@@ -54,6 +54,7 @@ call plug#begin(stdpath('data') . '/plugged')
     " Syntax highlighting
     Plug 'yuezk/vim-js', { 'for': 'js' }
     Plug 'MaxMEllon/vim-jsx-pretty', { 'for': 'jsx' }
+    Plug 'vim-scripts/colorizer'
 
     " Miscellanious
     Plug 'vimwiki/vimwiki'
