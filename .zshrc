@@ -1,6 +1,9 @@
 # Add Dotnet Core tools directory to path
 PATH=$HOME/.dotnet/tools:$PATH
 
+# Add user bin folder to path
+PATH=$HOME/.local/bin:$PATH
+
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
