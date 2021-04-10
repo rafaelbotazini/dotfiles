@@ -9,6 +9,14 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH="/home/rafael/.config/oh-my-zsh"
 
+# XDG Base directories
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_CACHE_HOME=$HOME/.cache
+
+export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages 	# Nuget cache
+export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+
 # ZSH theme config
 ZSH_THEME=""
 TYPEWRITTEN_PROMPT_LAYOUT="singleline_verbose"
@@ -30,12 +38,6 @@ ZSH_THEME_GIT_PROMPT_PREFIX="(%{$fg_bold[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%} %{$fg[yellow]%}%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$reset_color%}"
-
-# XDG Base directories
-export XDG_CONFIG_HOME=$HOME/.config
-export XDG_DATA_HOME=$HOME/.local/share
-export XDG_CACHE_HOME=$HOME/.cache
-export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages 	# Nuget cache
 
 # Aliases
 alias ip="ip -color=auto"
