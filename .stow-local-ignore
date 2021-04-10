@@ -1,0 +1,13 @@
+# keep custom configs
+
+^\.config/alacritty
+^\.config/awesome
+^\.config/nvim
+^\.config/ranger
+^\.config/rofi
+^\.config/git
+
+\.git
+\.gitignore
+README.md
+
