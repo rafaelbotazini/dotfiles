@@ -18,3 +18,5 @@ run thunar --daemon
 
 run nm-applet
 run pa-applet
+
+run picom
