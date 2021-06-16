@@ -36,10 +36,13 @@ HISTFILE=$XDG_CACHE_HOME/zsh_history
 bindkey -s '^o' 'ranger .\n'
 
 # Aliases
+alias ls="ls --color=auto"
 alias ip="ip -color=auto"
 alias c="clear"
 alias z="source ~/.zshrc"
 alias update="yay -Syyu"
+alias gst="git status"
+alias glo="git log --oneline"
 
 local vte=/etc/profile.d/vte.sh
 

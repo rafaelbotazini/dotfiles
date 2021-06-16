@@ -9,10 +9,11 @@
 ^\.config/picom
 ^\.config/zsh
 
+^\.local/bin
+
 # ignore some files
 \.config/zsh/zsh_history
 
 \.git
 \.gitignore
 README.md
-
