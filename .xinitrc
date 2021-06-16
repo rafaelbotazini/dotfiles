@@ -52,5 +52,5 @@ xrandr --output eDP-1 --set "PRIME Syncronization" 1
 
 export XDG_SESSION_TYPE=x11
 export GDK_BACKEND=x11
-exec xfce4-session
+exec awesome
 
