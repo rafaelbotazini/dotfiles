@@ -7,6 +7,10 @@
 ^\.config/rofi
 ^\.config/git
 ^\.config/picom
+^\.config/zsh
+
+# ignore some files
+\.config/zsh/zsh_history
 
 \.git
 \.gitignore

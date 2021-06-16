@@ -6,9 +6,6 @@ PATH=$HOME/.local/bin:$PATH
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="/home/rafael/.config/oh-my-zsh"
-
 # XDG Base directories
 export XDG_CONFIG_HOME=$HOME/.config
 export XDG_DATA_HOME=$HOME/.local/share
@@ -17,27 +14,26 @@ export XDG_CACHE_HOME=$HOME/.cache
 export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages 	# Nuget cache
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
 
-# ZSH theme config
-ZSH_THEME=""
-TYPEWRITTEN_PROMPT_LAYOUT="singleline_verbose"
-TYPEWRITTEN_CURSOR="block"
-TYPEWRITTEN_SYMBOL="λ"
+# Enable colors & set prompt style
+autoload -U colors && colors
+PS1="[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[green]%}%m%{$reset_color%} %{$fg[cyan]%}%c%{$reset_color%}]$ "
 
-#ZSH plugins
-plugins=(
-	git
-)
+# Enable autocomplete
+autoload -U compinit
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)
 
-# Source oh-my-zsh functions
-source $ZSH/oh-my-zsh.sh
+ZSH_CONFIG=$HOME/.config/zsh
 
-# [rafael@arch ~ (master )]$ 
-PROMPT='[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[green]%}%m%{$reset_color%} %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}]$ '
+# Setup history
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=$XDG_CACHE_HOME/zsh_history
 
-ZSH_THEME_GIT_PROMPT_PREFIX="(%{$fg_bold[green]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[green]%} %{$fg[yellow]%}%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$reset_color%}"
+# Open current dir in ranger with ctrl-o
+bindkey -s '^o' 'ranger .\n'
 
 # Aliases
 alias ip="ip -color=auto"
@@ -45,8 +41,12 @@ alias c="clear"
 alias z="source ~/.zshrc"
 alias update="yay -Syyu"
 
+local vte=/etc/profile.d/vte.sh
+
 # Make tilix use vte
-. /etc/profile.d/vte.sh
+if [[ -f $vte ]]; then
+    . $vte
+fi
 
 # Color hack for man pages
 man() {
@@ -59,4 +59,6 @@ man() {
     command man "$@"
 }
 
+source $ZSH_CONFIG/directories.zsh
+source $ZSH_CONFIG/key-bindings.zsh
 
