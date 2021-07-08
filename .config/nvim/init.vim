@@ -38,9 +38,10 @@ call plug#begin(stdpath('data') . '/plugged')
 
     " Appearance
     Plug 'ryanoasis/vim-devicons'
-    Plug 'morhetz/gruvbox'
+    " Plug 'morhetz/gruvbox'
+    Plug 'tomasiser/vim-code-dark'
     Plug 'itchyny/lightline.vim'
-    Plug 'shinchu/lightline-gruvbox.vim'
+    " Plug 'shinchu/lightline-gruvbox.vim'
 
     " Nerdtree
     Plug 'preservim/nerdtree'
@@ -66,8 +67,8 @@ call plug#end()
 "       Gruvbox
 "
 
-autocmd VimEnter * ++nested colorscheme gruvbox
-autocmd VimEnter * hi Normal ctermbg=none
+autocmd VimEnter * ++nested colorscheme codedark
+"autocmd VimEnter * hi Normal ctermbg=none
 
 
 
@@ -76,7 +77,7 @@ autocmd VimEnter * hi Normal ctermbg=none
 "
 
 " Set gruvbox theme to lightline
-let g:lightline = { 'colorscheme': 'gruvbox' }
+let g:lightline = { 'colorscheme': 'codedark' }
 
 
 
