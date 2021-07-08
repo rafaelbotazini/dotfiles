@@ -65,3 +65,4 @@ man() {
 source $ZSH_CONFIG/directories.zsh
 source $ZSH_CONFIG/key-bindings.zsh
 
+source /usr/share/nvm/init-nvm.sh
