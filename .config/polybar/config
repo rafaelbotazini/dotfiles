@@ -17,11 +17,11 @@
 ;========================================================================
 
 [colors]
-background = #000000
-background-transparent = #7504060e
+background = #1c1e25
+background-transparent = #1c1e25cc
 foreground = #ccffffff
 foreground-icon = #ccffffff
-workspace-active = #75757575
+workspace-active = #23252e
 
 [settings]
 screenchange-reload = true
@@ -51,24 +51,24 @@ fixed-center = true
 background = ${colors.background}
 foreground = ${colors.foreground}
 line-size = 1
-line-color = 
-border-size = 
-border-color = 
+line-color =
+border-size =
+border-color =
 padding-left = 0
-padding-right = 2
+padding-right = 4
 module-margin-left = 1
 module-margin-right = 0
-separator = 
+separator = "  "
 locale = en_US.UTF-8
 override-redirect = false
-;wm-restack = 
+;wm-restack =
 cursor-click = pointer
-cursor-scroll = pointer
+cursor-scroll = ns-resize
 ;enable-ipc = true
 ;double-click-left = polybar-msg cmd restart &
-click-left = jgmenu_run >/dev/null 2>&1 &
-click-middle = xfce4-taskmanager &
-click-right = ~/winfuncs.sh cascade &
+;click-left = jgmenu_run >/dev/null 2>&1 &
+;click-middle = alacritty -e htop &
+;click-right = ~/winfuncs.sh cascade &
 ; also
 ; winfuncs.sh select
 ; winfuncs.sh tile
@@ -95,9 +95,9 @@ scroll-down =
 ;   none
 tray-position = right
 tray-detached = false
-tray-maxsize = 15
-tray-background = 
-tray-offset-x = -6
+;tray-maxsize = 15
+;tray-background =
+;tray-offset-x = -6
 tray-offset-y = 0
 tray-padding = 0
 tray-scale = 1.0
@@ -105,7 +105,7 @@ tray-scale = 1.0
 ;============================= fonts ====================================
 
 font-0 = Noto Sans:size=9;2
-font-1 = FontAwesome:pixelsize=10;2
+font-1 = FiraCode Nerd Font:pixelsize=10;2
 font-2 = Font Awesome 5 Free Solid:pixelsize=10;2
 font-3 = Font Awesome 5 Free:pixelsize=10;2
 font-4 = Font Awesome 5 Brands:pixelsize=10;2
@@ -118,49 +118,41 @@ font-7 = Noto Serif:bold:size=9;2
 ;========================================================================
 ;jgmenu workspaces xwindow powermenu pulseaudio cpu mem fs eth date torrent gedit updates files settings shutdown zentile
 
-modules-left = workspaces 
+modules-left = shutdown workspaces
 modules-center = xwindow
-modules-right = cpu mem fs torrent eth pulseaudio updates settings date shutdown
+modules-right = updates xkeyboard cpu mem fs eth pulseaudio battery date settings
 
+;=============================== xkeyboard ==============================
 
-;=============================== jgmenu =================================
-;
-;[module/jgmenu]
-;type = custom/text
-;content-padding = 2
-;;content-foreground = #34BE5B (manjaro green)
-;content-foreground = #70ffffff
-;content = "     "
-;click-left = jgmenu_run >/dev/null 2>&1 &
-;
-;
+[module/xkeyboard]
+type = internal/xkeyboard
+
+; List of indicators to ignore
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+
+; Available tokens:
+;   %layout%
+;   %name%
+;   %number%
+;   %icon%
+;   %variant% (unreleased)
+; Default: %layout%
+label-layout = "     %layout% "
+
 ;=============================== shutdown ===============================
 
 [module/shutdown]
 type = custom/text
 
 content = "   "
-content-background = 
+content-background =
 content-foreground = ${colors.foreground-icon}
-content-padding = 
+content-padding =
 
 click-left = xfce4-session-logout &
-click-middle = 
-click-right = 
-
-;============================== files ===================================
-
-[module/files]
-type = custom/text
-
-content = "    "
-content-background = 
-content-foreground = ${colors.foreground-icon}
-content-padding = 
-
-click-left = 
-click-middle = 
-click-right = 
+click-middle =
+click-right =
 
 ;============================= updates ==================================
 
@@ -168,94 +160,29 @@ click-right =
 type = custom/script
 
 exec = ~/.config/polybar/scripts/updates.sh
-interval = 360
+interval = 3600 ;hourly
 
 ;icon is set in the script  
-format-prefix = 
-format-prefix-foreground = 
-label = " %output% "
+format-prefix =
+format-prefix-foreground =
+label = %output%
 format-foreground = ${colors.foreground-icon}
 
-click-left = pamac-manager &
-click-middle = 
-click-right = pamac-manager --updates &
-
-;============================ compton ===================================
-;
-;[module/compton]
-;type = custom/script
-;
-;exec = ~/.config/polybar/scripts/compton.sh
-;interval = 5
-;click-left = ~/.config/polybar/scripts/compton.sh --toggle &
-;click-middle = 
-;click-right = 
-;
-;format-prefix = 
-;format-prefix-foreground = 
-;label = "   "
-;format-foreground = ${colors.foreground-icon}
-;
-;============================= zentile ==================================
-
-[module/zentile2]
-type = custom/text
-
-content = "  "
-content-background = 
-content-foreground = ${colors.foreground-icon}
-content-padding = 
-
-click-left = ~/.config/polybar/scripts/zentile.sh --toggle &
-click-middle = 
-click-right = 
-
-;============================= zentile ==================================
-
-[module/zentile]
-type = custom/script
-
-exec = ~/.config/polybar/scripts/zentile.sh
-interval = 5
-
-;icons are set in the script   
-format-prefix = 
-format-prefix-foreground = 
-label = " %output% "
-format-foreground = ${colors.foreground-icon}
-
-click-left = ~/.config/polybar/scripts/zentile.sh --toggle &
-click-middle = 
-click-right = 
-
-;============================== gedit====================================
-
-[module/gedit]
-type = custom/text
-
-;
-content = "  "
-content-background = 
-content-foreground = ${colors.foreground-icon}
-content-padding = 
-
-click-left = gedit ~/.config/polybar/config &
-click-middle = gedit ~/.config/compton.conf &
-click-right = gedit &
+click-left =
+click-middle =
+click-right =
 
 ;============================= settings =================================
 
 [module/settings]
 type = custom/text
 
-content = "  "
-content-background = 
+content = "     "
+content-background =
 content-foreground = ${colors.foreground-icon}
-content-padding = 
+content-padding =
 
 click-left = xfce4-settings-manager &
-click-middle = 
-click-right = ~/.config/polybar/scripts/compton.sh --toggle &
 
 ;============================ workspaces ================================
 
@@ -279,33 +206,33 @@ enable-scroll = true
 ;   %index%
 ; Default: %icon%  %name%
 
-label-active-font = 8
+label-active-font = 0
 label-active = %index%
 label-active-foreground = ${colors.foreground-icon}
 label-active-background = ${colors.workspace-active}
 ;label-active-background = #2CA7F8
-label-active-underline = 
+label-active-underline =
 label-active-padding = 4
 
-label-occupied-font = 1
+label-occupied-font = 0
 label-occupied = %index%
-label-occupied-foreground = #09FF00
-label-occupied-background = 
-label-occupied-underline = 
+label-occupied-foreground = #bd9777
+label-occupied-background =
+label-occupied-underline =
 label-occupied-padding = 4
 
-label-urgent-font = 1
+label-urgent-font = 0
 label-urgent = %index%
-label-urgent-foreground = #FF0000
-label-urgent-background = 
-label-urgent-underline = 
+label-urgent-foreground = #ff6600
+label-urgent-background =
+label-urgent-underline =
 label-urgent-padding = 4
 
-label-empty-font = 1
+label-empty-font = 0
 label-empty = %index%
 label-empty-foreground = ${colors.foreground}
-label-empty-background = 
-label-empty-underline = 
+label-empty-background =
+label-empty-underline =
 label-empty-padding = 4
 
 ;========================== workspaces-alt===============================
@@ -315,12 +242,12 @@ type = internal/xworkspaces
 
 label-active = 
 label-active-foreground = ${colors.foreground-icon}
-label-active-background = 
+label-active-background =
 label-active-padding = 4
 
-label-empty = 
+label-empty = 
 label-empty-foreground = ${colors.foreground}
-label-empty-background = 
+label-empty-background =
 label-empty-padding = 4
 
 ;============================= xwindow ==================================
@@ -338,11 +265,11 @@ label-empty = " "
 type = internal/cpu
 interval = 2
 
-format-prefix = "  "
+format-prefix = "  "
 format-prefix-foreground = ${colors.foreground-icon}
 format-foreground = ${colors.foreground}
-format-background = 
-format-padding = 
+format-background =
+format-padding =
 label = %percentage:2%%
 
 ;============================== mem =====================================
@@ -368,11 +295,11 @@ interval = 2
 ;   %gb_swap_total%
 ;   %gb_swap_free%
 ;   %gb_swap_used%
-format-prefix = "    "
+format-prefix = "     "
 format-prefix-foreground = ${colors.foreground-icon}
 format-foreground = ${colors.foreground}
-format-background = 
-format-padding = 
+format-background =
+format-padding =
 label = %percentage_used%%
 
 ;================================= fs ===================================
@@ -394,32 +321,32 @@ mount-0 = /
 ;   %used%
 ; Default: %mountpoint% %percentage_free%%
 ; 
-label-mounted = %{F#eeffffff}    %{F-}%used%
+label-mounted = %{F#eeffffff}    %{F-}%used% (%percentage_used%%)
 label-mounted-foreground = ${colors.foreground}
-label-mounted-background = 
-label-mounted-padding = 
+label-mounted-background =
+label-mounted-padding =
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground}
-label-unmounted-background = 
-label-unmounted-padding = 
+label-unmounted-background =
+label-unmounted-padding =
 
 ;========================= torrent + eth ================================
 
 [module/torrent]
 type = custom/text
 
-content = "   "
-content-background = 
+content = "  "
+content-background =
 content-foreground = ${colors.foreground-icon}
-content-padding = 
+content-padding =
 
 click-left = qbittorrent &
-click-middle = 
-click-right = 
+click-middle =
+click-right =
 
 [module/eth]
 type = internal/network
-interface = enp0s3
+interface = wlp2s0
 interval = 3.0
 
 format-connected-prefix =
@@ -438,7 +365,7 @@ format-disconnected = <label-disconnected>
 ;   %linkspeed% [wired]
 
 ; Default: %ifname% %local_ip%
-label-connected = " %downspeed%   %upspeed%  "
+label-connected = "   %downspeed%    %upspeed%  "
 label-disconnected = not connected
 
 ;============================== date ====================================
@@ -448,8 +375,8 @@ type = internal/date
 
 label-foreground = #ffffff
 label = %date%
-date = %H:%M
-date-alt = "   %A, %d %B %Y     %H:%M"
+date = "%H:%M"
+date-alt = "       %A, %d %B %Y       %H:%M"
 
 ;========================== pulseaudio ==================================
 
@@ -472,7 +399,7 @@ interval = 5
 ;   <label-volume> (default)
 ;   <ramp-volume>
 ;   <bar-volume>
-format-volume = <ramp-volume> <label-volume>
+format-volume = <ramp-volume>   <label-volume>
 format-volume-foreground = ${colors.foreground-icon}
 
 ; Available tags:
@@ -490,13 +417,13 @@ label-volume-foreground = ${colors.foreground}
 ;  
 ; Available tokens:
 ;   %percentage% (default)
-label-muted = 
-label-muted-foreground = 
+label-muted = 婢
+label-muted-foreground =
 
 ; Only applies if <ramp-volume> is used
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
 
 click-right = pavucontrol &
 ;============================= temp =====================================
@@ -506,14 +433,14 @@ type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
 
-format = <ramp> <label>
-format-underline = #f50a4d
+format = <label>
+;format-underline =
 format-warn = <ramp> <label-warn>
 format-warn-underline = ${self.format-underline}
 
-label =  %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.foreground}
+label = "    %temperature-c%  "
+label-warn = "   %temperature-c%  "
+label-warn-underline = #f50a4d
 
 ramp-0 = 
 ramp-1 = 
@@ -531,18 +458,83 @@ format-padding = 0
 format-spacing = 2
 label-open = 
 label-close = 
-label-separator = | 
+label-separator = |
 
 
 menu-0-0 = POWEROFF
-menu-0-0-exec = 
+menu-0-0-exec =
 menu-0-1 = REBOOT
-menu-0-1-exec = 
+menu-0-1-exec =
 menu-0-2 = LOGOUT
-menu-0-2-exec = 
+menu-0-2-exec =
 
-;=========================================================================
+;============================ battery ===================================
 
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+full-at = 99
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP1
+
+; If an inotify event haven't been reported in this many
+; seconds, manually poll for new values.
+;
+; Needed as a fallback for systems that don't report events
+; on sysfs/procfs.
+;
+; Disable polling by setting the interval to 0.
+;
+; Default: 5
+poll-interval = 5
+
+; Available tags:
+;   <label-charging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-charging>
+format-charging = <animation-charging> <label-charging>
+
+; Only applies if <animation-charging> is used
+animation-charging-0 = "     "
+animation-charging-1 = "     "
+animation-charging-2 = "     "
+animation-charging-3 = "     "
+animation-charging-4 = "     "
+
+; Framerate in milliseconds
+animation-charging-framerate = 750
+
+; Available tokens:
+;   %percentage% (default) - is set to 100 if full-at is reached
+;   %percentage_raw%
+;   %time%
+;   %consumption% (shows current charge rate in watts)
+label-charging =  %percentage%%
+label-discharging =  %percentage%%
+label-full = "     %percentage%%"
+
+
+; Available tags:
+;   <label-discharging> (default)
+;   <bar-capacity>
+;   <ramp-capacity>
+;   <animation-discharging>
+format-discharging = <ramp-capacity> <label-discharging>
+
+; Only applies if <ramp-capacity> is used
+ramp-capacity-0 = "     "
+ramp-capacity-1 = "     "
+ramp-capacity-2 = "     "
+ramp-capacity-3 = "     "
+ramp-capacity-4 = "     "
+
+
+;========================================================================
 ; vim:ft=dosini
 
 

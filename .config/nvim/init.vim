@@ -9,7 +9,7 @@ set number
 " Intuitive split navigation
 set splitbelow splitright
 
-" kinda gringe bro ngl
+" kinda cringe bro ngl
 set mouse=a
 
 " Shortcut split navigation
@@ -64,11 +64,13 @@ call plug#end()
 
 
 "
-"       Gruvbox
+"       Colour scheme
 "
 
+let g:codedark_conservative = 1
+
 autocmd VimEnter * ++nested colorscheme codedark
-"autocmd VimEnter * hi Normal ctermbg=none
+autocmd VimEnter * hi Normal ctermbg=none
 
 
 

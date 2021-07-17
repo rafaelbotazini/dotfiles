@@ -1,12 +1,12 @@
 * {
-  background-color: #222222;
-  border-color: #333333;
+  background-color: #23252e;
   text-color: #cccccc;
   spacing: 0;
   width: 512px;
 }
 
 inputbar {
+  border-color: #333643;
   border: 0 0 1px 0;
   children: [prompt,entry];
 }
@@ -17,7 +17,6 @@ prompt {
 }
 
 textbox {
-  background-color: #2e343f;
   border: 0 0 1px 0;
   border-color: #282C33;
   padding: 8px 16px;
@@ -39,5 +38,5 @@ element {
 }
 
 element selected {
-  background-color: #2e343f;
+  background-color: #4c4f5c;
 }
