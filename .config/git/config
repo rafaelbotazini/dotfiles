@@ -1,5 +1,15 @@
+[core]
+	editor = "vim"
 [user]
 	email = rafaelbotazini@gmail.com
 	name = Rafael Botazini
+	username = rafaelbotazini
 [credential]
 	helper = store
+[difftool]
+	prompt = false
+[diff]
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE
+
