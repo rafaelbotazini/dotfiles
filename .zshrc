@@ -65,4 +65,7 @@ man() {
 source $ZSH_CONFIG/directories.zsh
 source $ZSH_CONFIG/key-bindings.zsh
 
-source /usr/share/nvm/init-nvm.sh
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
