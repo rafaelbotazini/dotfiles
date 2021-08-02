@@ -118,9 +118,9 @@ font-7 = Noto Serif:bold:size=9;2
 ;========================================================================
 ;jgmenu workspaces xwindow powermenu pulseaudio cpu mem fs eth date torrent gedit updates files settings shutdown zentile
 
-modules-left = shutdown workspaces
+modules-left = workspaces
 modules-center = xwindow
-modules-right = updates xkeyboard cpu mem fs eth pulseaudio battery date settings
+modules-right = updates xkeyboard cpu mem fs eth pulseaudio battery date settings shutdown
 
 ;=============================== xkeyboard ==============================
 
