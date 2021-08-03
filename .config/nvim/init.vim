@@ -39,7 +39,8 @@ call plug#begin(stdpath('data') . '/plugged')
     " Appearance
     Plug 'ryanoasis/vim-devicons'
     " Plug 'morhetz/gruvbox'
-    Plug 'tomasiser/vim-code-dark'
+    "Plug 'tomasiser/vim-code-dark'
+    Plug 'agronskiy/vim-code-dark'
     Plug 'itchyny/lightline.vim'
     " Plug 'shinchu/lightline-gruvbox.vim'
 
