@@ -14,9 +14,7 @@ export XDG_CACHE_HOME=$HOME/.cache
 export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages 	# Nuget cache
 export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
 
-# Enable colors & set prompt style
-autoload -U colors && colors
-PS1="[%{$fg_bold[blue]%}%n%{$reset_color%}@%{$fg_bold[green]%}%m%{$reset_color%} %{$fg[cyan]%}%c%{$reset_color%}]$ "
+setopt prompt_subst
 
 # Enable autocomplete
 autoload -U compinit
@@ -35,6 +33,9 @@ HISTFILE=$XDG_CACHE_HOME/zsh_history
 # Open current dir in ranger with ctrl-o
 bindkey -s '^o' 'ranger .\n'
 
+# Open alacritty in current directory
+bindkey -s '^t' 'alacritty --working-directory=.\n'
+
 # Aliases
 alias ls="ls --color=auto"
 alias ip="ip -color=auto"
@@ -51,6 +52,11 @@ if [[ -f $vte ]]; then
     . $vte
 fi
 
+# Enable colors & set prompt style
+autoload -U colors && colors
+PS1="[%{$fg_bold[blue]%}%n%{$reset_color%} :: %{$fg[cyan]%}%c%{$reset_color%}"
+PS1+='$(git_current_branch)]$ '
+
 # Color hack for man pages
 man() {
     LESS_TERMCAP_md=$'\e[01;31m' \
@@ -64,6 +70,7 @@ man() {
 
 source $ZSH_CONFIG/directories.zsh
 source $ZSH_CONFIG/key-bindings.zsh
+source $ZSH_CONFIG/git.zsh
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

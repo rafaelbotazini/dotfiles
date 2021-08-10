@@ -5,4 +5,4 @@ configuration {
 	terminal: "alacritty";
 }
 
-@import "/home/rafael/.config/rofi/themes/materia-slate.rasi"
+@import "themes/materia-slate.rasi"
