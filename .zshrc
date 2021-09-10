@@ -44,6 +44,7 @@ alias z="source ~/.zshrc"
 alias update="yay -Syyu"
 alias gst="git status"
 alias glo="git log --oneline"
+alias gdt="git difftool"
 
 local vte=/etc/profile.d/vte.sh
 
@@ -71,8 +72,14 @@ man() {
 source $ZSH_CONFIG/directories.zsh
 source $ZSH_CONFIG/key-bindings.zsh
 source $ZSH_CONFIG/git.zsh
+source $ZSH_CONFIG/completion.zsh
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if [[ -f .envrc  ]]; then
+    source .envrc
+fi
+
 
