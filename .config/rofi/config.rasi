@@ -1,8 +1,11 @@
+// vim:ft=scss
+
 configuration {
-	modi: "drun,run,ssh";
+	modi: "drun,run,ssh,window";
 	font: "Noto Sans Regular 10";
 	show-icons: true;
 	terminal: "alacritty";
 }
 
 @import "themes/materia-slate.rasi"
+
