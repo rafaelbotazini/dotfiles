@@ -1,5 +1,4 @@
 // vim:ft=scss
-
 configuration {
 	modi: "drun,run,ssh,window";
 	font: "Noto Sans Regular 10";
@@ -8,4 +7,4 @@ configuration {
 }
 
 @import "themes/materia-slate.rasi"
-
+@theme "themes/materia-slate.rasi"
