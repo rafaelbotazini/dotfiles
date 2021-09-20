@@ -45,6 +45,7 @@ alias update="yay -Syyu"
 alias gst="git status"
 alias glo="git log --oneline"
 alias gdt="git difftool"
+alias ssh="TERM=xterm-256color ssh"
 
 local vte=/etc/profile.d/vte.sh
 
