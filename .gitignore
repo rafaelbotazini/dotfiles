@@ -1,0 +1,20 @@
+# keep custom configs
+
+.config/*
+!.config/alacritty
+!.config/awesome
+!.config/nvim
+!.config/ranger
+!.config/rofi
+!.config/git
+!.config/picom
+!.config/polybar
+!.config/zsh
+
+.local/*
+!.local/bin/fix-cedilla
+!.local/bin/ssuspend
+
+# ignore some files
+.config/zsh/zsh_history
+

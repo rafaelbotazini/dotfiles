@@ -9,8 +9,8 @@ set number
 " Intuitive split navigation
 set splitbelow splitright
 
-" kinda cringe bro ngl
-set mouse=a
+" mouse navigation on visual mode
+"set mouse=v
 
 " Shortcut split navigation
 map <C-h> <C-w>h

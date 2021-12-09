@@ -1,20 +1,3 @@
-# keep custom configs
-
-^\.config/alacritty
-^\.config/awesome
-^\.config/nvim
-^\.config/ranger
-^\.config/rofi
-^\.config/git
-^\.config/picom
-^\.config/polybar
-^\.config/zsh
-
-^\.local/bin
-
-# ignore some files
-\.config/zsh/zsh_history
-
 \.git
 \.gitignore
 README.md
