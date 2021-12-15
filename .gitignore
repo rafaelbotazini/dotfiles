@@ -3,12 +3,13 @@
 .config/*
 !.config/alacritty
 !.config/awesome
-!.config/nvim
-!.config/ranger
-!.config/rofi
 !.config/git
+!.config/nvim
 !.config/picom
 !.config/polybar
+!.config/ranger
+!.config/rofi
+!.config/xfce4
 !.config/zsh
 
 .local/*

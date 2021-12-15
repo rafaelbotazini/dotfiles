@@ -47,10 +47,6 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  done
  unset f
 fi
-
-xrandr --output eDP-1 --set "PRIME Syncronization" 1
-
 export XDG_SESSION_TYPE=x11
 export GDK_BACKEND=x11
-exec awesome
-
+exec startxfce4
