@@ -4,6 +4,7 @@
 !.config/alacritty
 !.config/awesome
 !.config/git
+!.config/kitty
 !.config/nvim
 !.config/picom
 !.config/polybar
