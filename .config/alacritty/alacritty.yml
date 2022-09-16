@@ -49,6 +49,8 @@ window:
     x: 8
     y: 8
 
+  opacity: 0.975
+
   # Spread additional padding evenly around the terminal content.
   #dynamic_padding: false
 
@@ -78,7 +80,7 @@ window:
   #title: Alacritty
 
   # Allow terminal applications to change Alacritty's window title.
-  #dynamic_title: true
+  dynamic_title: true
 
   # Window class (Linux/BSD only):
   #class:
@@ -180,31 +182,31 @@ colors:
 #  # Default colors
   primary:
 #    # hard contrast: background = '0x1d2021'
-    background: '#272a34'
+#    background: '#272a34'
+#    background: '#1d1d1d'
+     background: '#181a20'
 #    # soft contrast: background = '0x32302f' 
 #    foreground: '#ebdbb2'
-#
-#  # Normal colors
-#  normal:
-#    black:   '#282828'
-#    red:     '#cc241d'
-#    green:   '#98971a'
-#    yellow:  '#d79921'
-#    blue:    '#458588'
-#    magenta: '#b16286'
-#    cyan:    '#689d6a'
-#    white:   '#a89984'
-#
-#  # Bright colors
-#  bright:
-#    black:   '#928374'
-#    red:     '#fb4934'
-#    green:   '#b8bb26'
-#    yellow:  '#fabd2f'
-#    blue:    '#83a598'
-#    magenta: '#d3869b'
-#    cyan:    '#8ec07c'
-#    white:   '#ebdbb2'
+# Normal colors
+  normal:
+    black:   '0x202020'
+    red:     '0xff6565'
+    green:   '0x93d44f'
+    yellow:  '0xeab93d'
+    blue:    '0x204a87'
+    magenta: '0xce5c00'
+    cyan:    '0x89b6e2'
+    white:   '0xcccccc'
+# Bright colors
+  bright:
+    black:   '0x606060'
+    red:     '0xff8d8d'
+    green:   '0xc8e7a8'
+    yellow:  '0xffc123'
+    blue:    '0x3465a4'
+    magenta: '0xf57900'
+    cyan:    '0x46a4ff'
+    white:   '0xffffff'
 
 # Bell
 #

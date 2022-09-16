@@ -20,9 +20,7 @@
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
       <property name="plugin-ids" type="array">
-        <value type="int" value="1"/>
         <value type="int" value="15"/>
-        <value type="int" value="18"/>
         <value type="int" value="6"/>
         <value type="int" value="12"/>
         <value type="int" value="2"/>
@@ -30,10 +28,8 @@
         <value type="int" value="4"/>
         <value type="int" value="13"/>
         <value type="int" value="17"/>
-        <value type="int" value="9"/>
         <value type="int" value="7"/>
         <value type="int" value="5"/>
-        <value type="int" value="10"/>
         <value type="int" value="11"/>
         <value type="int" value="14"/>
         <value type="int" value="8"/>
@@ -70,6 +66,7 @@
         <value type="string" value="networkmanager applet"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="nm-applet"/>
         <value type="string" value="blueman"/>
         <value type="string" value="Optimus Manager Qt"/>
         <value type="string" value="qBittorrent"/>
@@ -125,11 +122,6 @@
     <property name="plugin-12" type="string" value="launcher">
       <property name="items" type="array">
         <value type="string" value="16395157692.desktop"/>
-      </property>
-    </property>
-    <property name="plugin-18" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16395157551.desktop"/>
       </property>
     </property>
   </property>

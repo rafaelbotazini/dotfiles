@@ -1,7 +1,7 @@
 // vim:ft=scss
 
 * {
-  background-color: #23252e;
+  background-color: #292c37;
   text-color: #cccccc;
   width: 512px;
   spacing: 0;
@@ -50,7 +50,7 @@ element selected,
 element-icon selected,
 element-index selected,
 element-text selected {
-  background-color: #4c4f5c;
+  background-color: #3b3e46;
 }
 
 element-icon {

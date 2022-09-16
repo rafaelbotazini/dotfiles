@@ -2,6 +2,7 @@
 configuration {
 	modi: "drun,run,ssh,window";
 	font: "Noto Sans Regular 10";
+        icon-theme: "kora";
 	show-icons: true;
 	terminal: "alacritty";
 }

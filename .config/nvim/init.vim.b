@@ -10,7 +10,7 @@ set number
 set splitbelow splitright
 
 " mouse navigation on visual mode
-"set mouse=v
+set mouse=a
 
 " Shortcut split navigation
 map <C-h> <C-w>h
@@ -26,7 +26,10 @@ nnoremap <leader>v :vsplit<space>
 map <a-j> :tabp<CR> 
 map <a-k> :tabn<CR> 
 
-" Open tab shotcut:
+" Quit all shortcut
+nnoremap ZA :quitall<CR>
+
+" Open tab shortcut:
 nnoremap <leader>t :tabnew<space>
 
 " Display matching files when tab complete
@@ -38,11 +41,10 @@ call plug#begin(stdpath('data') . '/plugged')
 
     " Appearance
     Plug 'ryanoasis/vim-devicons'
-    " Plug 'morhetz/gruvbox'
+    Plug 'morhetz/gruvbox'
     "Plug 'tomasiser/vim-code-dark'
-    Plug 'agronskiy/vim-code-dark'
     Plug 'itchyny/lightline.vim'
-    " Plug 'shinchu/lightline-gruvbox.vim'
+    Plug 'shinchu/lightline-gruvbox.vim'
 
     " Nerdtree
     Plug 'preservim/nerdtree'
@@ -59,7 +61,9 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'vim-scripts/colorizer'
 
     " Miscellanious
-    Plug 'vimwiki/vimwiki'
+    Plug 'ThePrimeagen/vim-be-good'
+    Plug 'matveyt/neoclip'
+
 
 call plug#end()
 
@@ -68,11 +72,11 @@ call plug#end()
 "       Colour scheme
 "
 
-let g:codedark_conservative = 1
+let g:gruvbox_contrast_dark = 'hard'
 
-autocmd VimEnter * ++nested colorscheme codedark
-autocmd VimEnter * hi Normal ctermbg=none
+autocmd VimEnter * hi! Normal guibg=NONE ctermbg=NONE
 
+colorscheme gruvbox
 
 
 "
@@ -80,7 +84,7 @@ autocmd VimEnter * hi Normal ctermbg=none
 "
 
 " Set gruvbox theme to lightline
-let g:lightline = { 'colorscheme': 'codedark' }
+let g:lightline = { 'colorscheme': 'gruvbox' }
 
 
 
@@ -89,15 +93,29 @@ let g:lightline = { 'colorscheme': 'codedark' }
 "
 
 let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeMouseMode=3
 
-nnoremap <C-b> :NERDTreeToggle<CR>
+autocmd StdinReadPre * let s:std_in=1
+
+" Mirror the NERDTree before showing it. This makes it the same on all tabs.
+nnoremap <C-b> :NERDTreeMirror<CR>:NERDTreeToggle<CR>
 
 " Exit Vim if NERDTree is the only window left.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
      \ quit | endif
 
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 " Open the existing NERDTree on each new tab.
 autocmd BufWinEnter * silent NERDTreeMirror
+
+" Start NERDTree when Vim starts with a directory argument.
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+
+" Start NERDTree when Vim is started without file arguments.
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 
 
 

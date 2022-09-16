@@ -14,4 +14,4 @@
 	cmd = nvim -d $LOCAL $REMOTE
 
 [pull]
-	rebase = true
+	rebase = false
