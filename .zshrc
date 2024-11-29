@@ -1,4 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+#q Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -89,12 +89,12 @@ preexec() {
     print -Pn "\e]0;$1\a"
 }
 
-source $ZSH_CONFIG/directories.zsh
-source $ZSH_CONFIG/key-bindings.zsh
-source $ZSH_CONFIG/git.zsh
-source $ZSH_CONFIG/completion.zsh
-source $ZSH_CONFIG/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $ZSH_CONFIG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -s "$ZSH_CONFIG/directories.zsh" ] && source $ZSH_CONFIG/directories.zsh
+[ -s "$ZSH_CONFIG/key-bindings.zsh" ] && source  $ZSH_CONFIG/key-bindings.zsh
+[ -s "$ZSH_CONFIG/git.zsh" ] && source $ZSH_CONFIG/git.zsh
+[ -s "$ZSH_CONFIG/completion.zsh" ] && source $ZSH_CONFIG/completion.zsh
+[ -s "$ZSH_CONFIG/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source $ZSH_CONFIG/zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -s "$ZSH_CONFIG/zsh-syntax-highlighting/zsh-syntax-highlighting.zshsource" ] && source $ZSH_CONFIG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 if [[ -f ~/.envrc  ]]; then
     source ~/.envrc
@@ -107,19 +107,23 @@ export NVM_DIR="$HOME/.config/nvm"
 # To customize prompt, run `p11k configure` or edit ~/.config/p10k.zsh.
 [[ ! -f ~/.config/p10k.zsh ]] || source ~/.config/p10k.zsh
 
-source ~/.local/share/powerlevel10k/powerlevel10k.zsh-theme
+[ -s "~/.local/share/powerlevel10k/powerlevel10k.zsh-theme" ] && source ~/.local/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # bun completions
-[ -s "/home/rafael/.bun/_bun" ] && source "/home/rafael/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # pnpm
-export PNPM_HOME="/home/rafael/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+. "$HOME/.asdf/asdf.sh"
+

@@ -449,7 +449,7 @@ require('nvim-treesitter.configs').setup {
     'cpp',
     'css',
     'go',
-    'help',
+    -- 'help',
     'html',
     'lua',
     'python',
