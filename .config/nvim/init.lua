@@ -24,8 +24,7 @@ vim.opt.rtp:prepend(lazypath)
 local signs = { Error = "", Warn = "", Hint = "󰌶", Info = "" }
 
 for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon })
+  vim.fn.sign_define("DiagnosticSign" .. type, { text = icon })
 end
 
 -- NOTE: Here is where you install your plugins.
@@ -154,6 +153,7 @@ require('lazy').setup({
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
+        add          = { text = '┃', },
         change       = { text = '┃' },
         delete       = { text = '┃' },
         topdelete    = { text = '┃' },
@@ -212,6 +212,10 @@ require('lazy').setup({
     -- Adds scrollbar
     'dstein64/nvim-scrollview',
     config = function()
+      vim.g.scrollview_diagnostics_info_symbol = signs.Info
+      vim.g.scrollview_diagnostics_hint_symbol = signs.Hint
+      vim.g.scrollview_diagnostics_warn_symbol = signs.Warn
+      vim.g.scrollview_diagnostics_error_symbol = signs.Error
       require('scrollview.contrib.gitsigns').setup()
     end,
     dependencies = {
@@ -338,7 +342,7 @@ require('lazy').setup({
   --    to get rid of the warning telling you that there are not plugins in `lua/custom/plugins/`.
   -- { import = 'custom.plugins' },
   --
-}, {})
+})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -496,6 +500,9 @@ vim.api.nvim_set_keymap("n", "<C-f>", ":Telescope file_browser<CR>", { noremap =
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
+  modules = {},
+  sync_install = false,
+  ignore_install = {},
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = {
     'c',
@@ -634,30 +641,18 @@ local on_attach = function(_, bufnr)
     '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function()
+    vim.lsp.buf.format({
+      filter = function(client)
+        return client.name ~= 'volar'
+      end
+    })
+  end, { desc = 'Format current buffer with LSP', })
 
-  mmap({ 'n', 'v' }, '<leader>f', vim.lsp.buf.format, '[F]ormat current buffer')
+  mmap({ 'n', 'v' }, '<leader>ff', ':Format<CR>', '[F]ormat current buffer')
 end
 
 
-local util = require 'lspconfig.util'
-local function get_typescript_server_path(root_dir)
-  local global_ts = '/home/rafael/.local/share/nvim/mason/packages/vue-language-server/node_modules/typescript/lib'
-  local found_ts = ''
-  local function check_dir(path)
-    found_ts = util.path.join(path, 'node_modules', 'typescript', 'lib')
-    if util.path.exists(found_ts) then
-      return path
-    end
-  end
-  if util.search_ancestors(root_dir, check_dir) then
-    return found_ts
-  else
-    return global_ts
-  end
-end
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -671,6 +666,7 @@ local servers = {
   -- pyright = {},
   -- rust_analyzer = {},
   ts_ls = {},
+  eslint = {},
 
   html = {
     filetypes = {
@@ -703,6 +699,7 @@ local servers = {
     -- end,
   },
   -- ts_ls = {},
+  -- vtsls = {},
   lua_ls = {
     settings = {
       Lua = {
@@ -728,6 +725,7 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
+  automatic_installation = false
 }
 
 mason_lspconfig.setup_handlers {
