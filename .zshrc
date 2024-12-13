@@ -14,6 +14,7 @@ PATH=$HOME/.local/bin:$PATH
 # Add flatpaks to path
 PATH=$HOME/.local/share/flatpak/exports/bin:$PATH
 
+
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # XDG Base directories
@@ -89,6 +90,13 @@ preexec() {
     print -Pn "\e]0;$1\a"
 }
 
+ctop() {
+    docker run --rm -ti \
+      --name=ctop \
+      --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+      quay.io/vektorlab/ctop:latest
+}
+
 [ -s "$ZSH_CONFIG/directories.zsh" ] && source $ZSH_CONFIG/directories.zsh
 [ -s "$ZSH_CONFIG/key-bindings.zsh" ] && source  $ZSH_CONFIG/key-bindings.zsh
 [ -s "$ZSH_CONFIG/git.zsh" ] && source $ZSH_CONFIG/git.zsh
@@ -104,18 +112,22 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# To customize prompt, run `p11k configure` or edit ~/.config/p10k.zsh.
-[[ ! -f ~/.config/p10k.zsh ]] || source ~/.config/p10k.zsh
+if [ "$HOME/.local/share/powerlevel10k/powerlevel10k.zsh-theme" ]; then
+    source $HOME/.local/share/powerlevel10k/powerlevel10k.zsh-theme
 
-[ -s "~/.local/share/powerlevel10k/powerlevel10k.zsh-theme" ] && source ~/.local/share/powerlevel10k/powerlevel10k.zsh-theme
-
-# bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
-
+    # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+    [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+fi
 
 # bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+if [ -s "~/.bun/_bun" ]; then
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
+
+    # bun completions
+    source "$BUN_INSTALL/.bun/_bun"
+fi
+
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -125,5 +137,15 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-. "$HOME/.asdf/asdf.sh"
+if [ -s "$HOME/.asdf/asdf.sh" ]; then
+    source $HOME/.asdf/asdf.sh
+    # append completions to fpath
+    fpath+=${ZDOTDIR:-~}/.zsh_functions
+    fpath=(${ASDF_DIR}/completions $fpath)
+fi
+
+[ -s "$HOME/.cargo/env" ] && source $HOME/.cargo/env
+
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
 

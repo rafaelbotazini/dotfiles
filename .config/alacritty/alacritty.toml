@@ -1,0 +1,47 @@
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "N"
+mods = "Control|Alt"
+
+[colors.bright]
+black = "0x606060"
+blue = "0x3465a4"
+cyan = "0x46a4ff"
+green = "0xc8e7a8"
+magenta = "0xf57900"
+red = "0xff8d8d"
+white = "0xffffff"
+yellow = "0xffc123"
+
+[colors.normal]
+black = "0x202020"
+blue = "0x204a87"
+cyan = "0x89b6e2"
+green = "0x93d44f"
+magenta = "0xce5c00"
+red = "0xff6565"
+white = "0xcccccc"
+yellow = "0xeab93d"
+
+[colors.primary]
+background = "#181a20"
+
+[font]
+size = 13
+
+[font.italic]
+style = "Italic"
+
+[font.normal]
+family = "FiraCode Nerd Font Mono"
+style = "Regular"
+
+[window]
+dynamic_title = true
+opacity = 0.975
+
+[window.padding]
+x = 8
+y = 8
+
+[keyboard]
