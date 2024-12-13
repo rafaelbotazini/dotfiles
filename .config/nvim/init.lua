@@ -1,41 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, and understand
-  what your configuration is doing.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-  And then you can explore or search through `:help lua-guide`
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -59,6 +21,12 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+local signs = { Error = "", Warn = "", Hint = "󰌶", Info = "" }
+
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon })
+end
 
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
@@ -81,7 +49,7 @@ require('lazy').setup({
   'tpope/vim-sleuth',
 
   -- Use Neovim as language server to inject diagnostics, code actions, and more
-  'jose-elias-alvarez/null-ls.nvim',
+  'nvimtools/none-ls.nvim',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -100,6 +68,8 @@ require('lazy').setup({
         opts = {},
       },
 
+      'hrsh7th/cmp-nvim-lsp',
+
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
@@ -107,7 +77,74 @@ require('lazy').setup({
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    dependencies = {
+      {
+        'L3MON4D3/LuaSnip',
+        build = (function()
+          -- Build Step is needed for regex support in snippets.
+          -- This step is not supported in many windows environments.
+          -- Remove the below condition to re-enable on windows.
+          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+            return
+          end
+          return 'make install_jsregexp'
+        end)(),
+        dependencies = {
+          'rafamadriz/friendly-snippets',
+          config = function()
+            require('luasnip.loaders.from_vscode').lazy_load()
+          end,
+        },
+      },
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-nvim-lsp',
+    },
+    config = function()
+      local cmp = require 'cmp'
+      local luasnip = require 'luasnip'
+
+      luasnip.config.setup {}
+
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert {
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete {},
+          ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+          },
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+          { name = 'path' },
+        },
+      }
+    end
   },
 
   -- Useful plugin to show you pending keybinds.
@@ -117,59 +154,58 @@ require('lazy').setup({
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
-        add          = { text = '┃' },
         change       = { text = '┃' },
         delete       = { text = '┃' },
         topdelete    = { text = '┃' },
         changedelete = { text = '┃' },
         untracked    = { text = '┃' },
       },
-      -- on_attach = function(bufnr)
-      --   local gs = package.loaded.gitsigns
-      --
-      --   local function map(mode, l, r, opts)
-      --     opts = opts or {}
-      --     opts.buffer = bufnr
-      --     if opts.desc then
-      --       opts.desc = 'Git: ' .. opts.desc
-      --     end
-      --     vim.keymap.set(mode, l, r, opts)
-      --   end
-      --
-      --   -- Navigation
-      --   map('n', ']c', function()
-      --     if vim.wo.diff then return ']c' end
-      --     vim.schedule(function() gs.next_hunk() end)
-      --     return '<Ignore>'
-      --   end, { expr = true, desc = 'Next change' })
-      --
-      --   map('n', '[c', function()
-      --     if vim.wo.diff then return '[c' end
-      --     vim.schedule(function() gs.prev_hunk() end)
-      --     return '<Ignore>'
-      --   end, { expr = true, desc = 'Prev change' })
-      --
-      --   -- Actions
-      --   map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage hunk' })
-      --   map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset hunk' })
-      --   map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
-      --     { desc = 'Stage selected hunk' })
-      --   map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
-      --     { desc = 'Reset selected hunk' })
-      --   map('n', '<leader>hS', gs.stage_buffer, { desc = 'Stage buffer' })
-      --   map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'Undo stage hunk' })
-      --   map('n', '<leader>hR', gs.reset_buffer, { desc = 'Reset buffer' })
-      --   map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview hunk' })
-      --   map('n', '<leader>hb', function() gs.blame_line { full = true } end, { desc = 'Blame line' })
-      --   map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle Line Blame' })
-      --   map('n', '<leader>hd', gs.diffthis, { desc = 'Diff this' })
-      --   map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = 'Diff this ~' })
-      --   map('n', '<leader>td', gs.toggle_deleted, { desc = 'Toggle deleted' })
-      --   map('n', '<leader>td', gs.toggle_deleted, { desc = 'Toggle deleted' })
-      --
-      --   -- Text object
-      --   map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-      -- end
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          if opts.desc then
+            opts.desc = 'Git: ' .. opts.desc
+          end
+          vim.keymap.set(mode, l, r, opts)
+        end
+
+        -- Navigation
+        map('n', ']c', function()
+          if vim.wo.diff then return ']c' end
+          vim.schedule(function() gs.next_hunk() end)
+          return '<Ignore>'
+        end, { expr = true, desc = 'Next change' })
+
+        map('n', '[c', function()
+          if vim.wo.diff then return '[c' end
+          vim.schedule(function() gs.prev_hunk() end)
+          return '<Ignore>'
+        end, { expr = true, desc = 'Prev change' })
+
+        -- Actions
+        map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage hunk' })
+        map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset hunk' })
+        map('v', '<leader>hs', function() gs.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
+          { desc = 'Stage selected hunk' })
+        map('v', '<leader>hr', function() gs.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
+          { desc = 'Reset selected hunk' })
+        map('n', '<leader>hS', gs.stage_buffer, { desc = 'Stage buffer' })
+        map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'Undo stage hunk' })
+        map('n', '<leader>hR', gs.reset_buffer, { desc = 'Reset buffer' })
+        map('n', '<leader>hp', gs.preview_hunk, { desc = 'Preview hunk' })
+        map('n', '<leader>hb', function() gs.blame_line { full = true } end, { desc = 'Blame line' })
+        map('n', '<leader>tb', gs.toggle_current_line_blame, { desc = 'Toggle Line Blame' })
+        map('n', '<leader>hd', gs.diffthis, { desc = 'Diff this' })
+        map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = 'Diff this ~' })
+        map('n', '<leader>td', gs.toggle_deleted, { desc = 'Toggle deleted' })
+        map('n', '<leader>td', gs.toggle_deleted, { desc = 'Toggle deleted' })
+
+        -- Text object
+        map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+      end
     },
   },
   {
@@ -178,10 +214,17 @@ require('lazy').setup({
     config = function()
       require('scrollview.contrib.gitsigns').setup()
     end,
-    opts = {
-      signs_on_startup = { 'all' },
+    dependencies = {
+      'lewis6991/gitsigns.nvim',
     }
   },
+  -- {
+  --   "ellisonleao/gruvbox.nvim",
+  --   priority = 1000,
+  --   config = function ()
+  --     vim.cmd.colorscheme 'gruvbox'
+  --   end
+  -- },
   {
     'Mofiqul/vscode.nvim',
     priority = 1000,
@@ -192,7 +235,7 @@ require('lazy').setup({
       vim.cmd.colorscheme 'vscode'
     end,
   },
-  --{ -- Theme inspired by Atom
+  -- { -- Theme inspired by Atom
   --  'navarasu/onedark.nvim',
   --  priority = 1000,
   --  config = function()
@@ -201,19 +244,25 @@ require('lazy').setup({
   --    }
   --    vim.cmd.colorscheme 'onedark'
   --  end,
-  --},
+  -- },
 
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
       options = {
-        icons_enabled = false,
-        -- theme = 'onedark',
+        icons_enabled = true,
+        -- theme = 'gruvbox',
         theme = 'vscode',
+        -- theme = 'onedark',
         component_separators = '|',
         section_separators = '',
       },
+      sections = {
+        lualine_c = {
+          { 'filename', path = 1 }
+        },
+      }
     },
   },
 
@@ -336,10 +385,13 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.termguicolors = true
 
 -- vim.o.foldcolumn = '4'
-vim.o.fillchars = "eob:~,fold:-,foldopen:󰛲,foldclose:"
+vim.opt.fillchars = "eob:~,fold:-,foldopen:󰛲,foldclose:,diff: "
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.opt.foldenable = false
+
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 -- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, { pattern = { "*" }, command = "normal zR", })
 
 -- [[ Basic Keymaps ]]
@@ -356,9 +408,10 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set({ 'n', 'i' }, '<C-h>', ':nohl<CR>', { silent = true })
 vim.keymap.set('n', 'ZA', ':quitall<CR>', { silent = true })
 
-vim.keymap.set('n', '<leader>hv', ':DiffviewOpen<CR>', { desc = 'Git: Diff View' })
-vim.keymap.set('n', '<leader>hh', ':DiffviewFileHistory<CR>', { desc = 'Git: View Current Branch File History' })
-vim.keymap.set('n', '<leader>hH', ':DiffviewFileHistory %<CR>', { desc = 'Git: View Current File History' })
+vim.keymap.set('n', '<leader>hv', ':DiffviewOpen<CR>', { desc = 'Git: Diff [V]iew' })
+vim.keymap.set('n', '<leader>hc', ':DiffviewClose<CR>', { desc = 'Git: [C]lose Diff View' })
+vim.keymap.set('n', '<leader>hh', ':DiffviewFileHistory<CR>', { desc = 'Git: View Current Branch File [H]istory' })
+vim.keymap.set('n', '<leader>hH', ':DiffviewFileHistory %<CR>', { desc = 'Git: View Current File [H]istory' })
 
 vim.keymap.set('n', '<a-h>', '<c-w>h', { desc = 'Window: move cursor to window at left side' })
 vim.keymap.set('n', '<a-j>', '<c-w>j', { desc = 'Window: move cursor to window below' })
@@ -386,7 +439,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 require('telescope').setup {
   pickers = {
     find_files = {
-      hidden = true
+      -- hidden = true
     },
     buffers = {
       mappings = {
@@ -403,7 +456,7 @@ require('telescope').setup {
     file_browser = {
       -- theme = "ivy",
       -- disables netrw and use telescope-file-browser in its place
-      hijack_netrw = true,
+      -- hijack_netrw = true,
     },
   },
 }
@@ -570,6 +623,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+  nmap('gh', vim.lsp.buf.hover, 'Hover Documentation')
   nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
@@ -616,7 +670,7 @@ local servers = {
   gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  tsserver = {},
+  ts_ls = {},
 
   html = {
     filetypes = {
@@ -637,11 +691,18 @@ local servers = {
     },
   },
   volar = {
-    filetypes = { "vue" },
-    on_new_config = function(new_config, new_root_dir)
-      new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-    end,
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+    init_options = {
+      vue = {
+        -- disable hybrid mode
+        hybridMode = false,
+      },
+    },
+    -- on_new_config = function(new_config, new_root_dir)
+    --   new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+    -- end,
   },
+  -- ts_ls = {},
   lua_ls = {
     settings = {
       Lua = {
@@ -694,7 +755,7 @@ local null_ls = require('null-ls')
 null_ls.setup({
   sources = {
     null_ls.builtins.formatting.prettier,
-    null_ls.builtins.diagnostics.eslint_d,
+    -- null_ls.builtins.diagnostics.eslint_d,
   },
 })
 
@@ -704,60 +765,7 @@ vim.diagnostic.config({
   underline = true,
 })
 
-local signs = { Error = "", Warn = "", Hint = "󰌶", Info = "" }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
-
 -- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-
-luasnip.config.setup {}
-
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-}
-
-vim.o.linespace = 36
-
-
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
