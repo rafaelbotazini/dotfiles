@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh postgres00 ./export-request.sh $1 | xclip -sel copy

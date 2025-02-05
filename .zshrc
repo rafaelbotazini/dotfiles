@@ -61,6 +61,7 @@ alias gdt="git difftool"
 alias gpu='git push -u origin $(git branch --show-current)'
 alias ssh="TERM=xterm-256color ssh"
 alias ytmp4="yt-dlp -S ext:mp4:m4a"
+alias tsh="tmux-sessionizer"
 
 local vte=/etc/profile.d/vte.sh
 

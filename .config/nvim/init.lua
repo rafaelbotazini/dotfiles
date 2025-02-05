@@ -73,7 +73,14 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
-
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({})
+    end
+  },
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     dependencies = {
@@ -222,23 +229,28 @@ require('lazy').setup({
       'lewis6991/gitsigns.nvim',
     }
   },
-  -- {
-  --   "ellisonleao/gruvbox.nvim",
-  --   priority = 1000,
-  --   config = function ()
-  --     vim.cmd.colorscheme 'gruvbox'
-  --   end
-  -- },
   {
-    'Mofiqul/vscode.nvim',
+    'f4z3r/gruvbox-material.nvim',
+    name = 'gruvbox-material',
+    lazy = false,
     priority = 1000,
-    config = function()
-      require('vscode').setup {
-        transparent = true
+    opts = {
+      contrast = 'hard',
+      signs = {
+        highlight = false
       }
-      vim.cmd.colorscheme 'vscode'
-    end,
+    },
   },
+  -- {
+  --   'Mofiqul/vscode.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     require('vscode').setup {
+  --       transparent = true
+  --     }
+  --     vim.cmd.colorscheme 'vscode'
+  --   end,
+  -- },
   -- { -- Theme inspired by Atom
   --  'navarasu/onedark.nvim',
   --  priority = 1000,
@@ -249,15 +261,14 @@ require('lazy').setup({
   --    vim.cmd.colorscheme 'onedark'
   --  end,
   -- },
-
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = true,
-        -- theme = 'gruvbox',
-        theme = 'vscode',
+        theme = 'gruvbox-material',
+        -- theme = 'vscode',
         -- theme = 'onedark',
         component_separators = '|',
         section_separators = '',
@@ -378,7 +389,7 @@ vim.o.smartcase = true
 vim.wo.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 100
 vim.o.timeout = true
 vim.o.timeoutlen = 300
 
@@ -448,10 +459,10 @@ require('telescope').setup {
     buffers = {
       mappings = {
         n = {
-          ['<C-S-d>'] = require('telescope.actions').delete_buffer
+          ['<C-D>'] = require('telescope.actions').delete_buffer
         },
         i = {
-          ['<C-S-d>'] = require('telescope.actions').delete_buffer
+          ['<C-D>'] = require('telescope.actions').delete_buffer
         },
       },
     },
@@ -643,8 +654,12 @@ local on_attach = function(_, bufnr)
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function()
     vim.lsp.buf.format({
+      timeout_ms = 10000,
       filter = function(client)
-        return client.name ~= 'volar'
+        -- print(client.name)
+        -- ignore volar, eslint and ts_ls formatting
+        -- js related files will be formatted using prettier
+        return client.name ~= 'volar' and client.name ~= 'eslint' and client.name ~= 'ts_ls'
       end
     })
   end, { desc = 'Format current buffer with LSP', })
@@ -665,9 +680,26 @@ local servers = {
   gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  ts_ls = {},
   eslint = {},
-
+  volar = {},
+  ts_ls = {
+    init_options = {
+      plugins = {
+        {
+          name = "@vue/typescript-plugin",
+          location = '/home/rafael/.asdf/installs/nodejs/20.18.1/lib/node_modules/@vue/typescript-plugin',
+          languages = { "javascript", "typescript", "vue" },
+        },
+      },
+    },
+    filetypes = {
+      'typescript',
+      'javascript',
+      'javascriptreact',
+      'typescriptreact',
+      'vue',
+    },
+  },
   html = {
     filetypes = {
       "html",
@@ -686,19 +718,6 @@ local servers = {
       "vue"
     },
   },
-  volar = {
-    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    init_options = {
-      vue = {
-        -- disable hybrid mode
-        hybridMode = false,
-      },
-    },
-    -- on_new_config = function(new_config, new_root_dir)
-    --   new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-    -- end,
-  },
-  -- ts_ls = {},
   -- vtsls = {},
   lua_ls = {
     settings = {
