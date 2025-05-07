@@ -340,7 +340,23 @@ require('lazy').setup({
       pcall(require('nvim-treesitter.install').update { with_sync = true })
     end,
   },
-
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {
+      view_options = {
+        show_hidden = true,
+      },
+      keymaps = {
+        ["<C-p>"] = false,
+        ["<C-a>"] = { "actions.preview", opts = { split = "belowright" } },
+      }
+    },
+    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  }
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -505,12 +521,11 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
-vim.api.nvim_set_keymap("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-  { noremap = true, desc = '[F]ile [browser]' })
-
-vim.api.nvim_set_keymap("n", "<space>pf", ":Telescope file_browser<CR>", { noremap = true, desc = '[P]roject [F]iles' })
-vim.api.nvim_set_keymap("n", "<C-f>", ":Telescope file_browser<CR>", { noremap = true, desc = '[P]roject [F]iles' })
+vim.keymap.set("n", "<space>fb", ':Oil<CR>', { noremap = true, desc = '[F]ile [browser]' })
+vim.keymap.set("n", "<space>pf", require('oil.actions').open_cwd.callback, { noremap = true, desc = '[P]roject [F]iles' })
+vim.keymap.set("n", "<C-f>", require('oil.actions').open_cwd.callback, { noremap = true, desc = '[P]roject [F]iles' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -691,7 +706,7 @@ local servers = {
       plugins = {
         {
           name = "@vue/typescript-plugin",
-          location = '/home/rafael/.asdf/installs/nodejs/20.18.1/lib/node_modules/@vue/typescript-plugin',
+          location = '/home/rafael/.asdf/installs/nodejs/20.18.2/lib/node_modules/@vue/typescript-plugin',
           languages = { "javascript", "typescript", "vue" },
         },
       },
