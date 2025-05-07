@@ -3,45 +3,44 @@ action = "SpawnNewInstance"
 key = "N"
 mods = "Control|Alt"
 
-[colors.bright]
-black = "0x606060"
-blue = "0x3465a4"
-cyan = "0x46a4ff"
-green = "0xc8e7a8"
-magenta = "0xf57900"
-red = "0xff8d8d"
-white = "0xffffff"
-yellow = "0xffc123"
-
-[colors.normal]
-black = "0x202020"
-blue = "0x204a87"
-cyan = "0x89b6e2"
-green = "0x93d44f"
-magenta = "0xce5c00"
-red = "0xff6565"
-white = "0xcccccc"
-yellow = "0xeab93d"
-
+# Default colors
 [colors.primary]
-background = "#181a20"
+background = '#1d2021'
+foreground = '#d4be98'
+
+# Normal colors
+[colors.normal]
+black   = '#32302f'
+red     = '#ea6962'
+green   = '#a9b665'
+yellow  = '#d8a657'
+blue    = '#7daea3'
+magenta = '#d3869b'
+cyan    = '#89b482'
+white   = '#d4be98'
+
+# Bright colors (same as normal colors)
+[colors.bright]
+black   = '#32302f'
+red     = '#ea6962'
+green   = '#a9b665'
+yellow  = '#d8a657'
+blue    = '#7daea3'
+magenta = '#d3869b'
+cyan    = '#89b482'
+white   = '#d4be98'
 
 [font]
-size = 13
+size = 12
 
 [font.italic]
 style = "Italic"
 
 [font.normal]
-family = "FiraCode Nerd Font Mono"
+family = "Inconsolata LGC Nerd Font"
 style = "Regular"
 
 [window]
-dynamic_title = true
 opacity = 0.975
+padding = { x = 8, y = 0 }
 
-[window.padding]
-x = 8
-y = 8
-
-[keyboard]
