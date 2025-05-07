@@ -44,6 +44,8 @@ require('lazy').setup({
   'sindrets/diffview.nvim',
   'nvim-tree/nvim-web-devicons',
 
+  'github/copilot.vim',
+
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
